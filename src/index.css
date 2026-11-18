@@ -1,0 +1,985 @@
+/* ================================================================
+   PRINCESS DAY — Design System
+   Single source of truth for all tokens, layout, and components.
+   ================================================================ */
+
+/* ================================================================
+   1. CSS CUSTOM PROPERTIES (design tokens)
+   ================================================================ */
+
+:root {
+  /* ── Palette: Blush Pink ── */
+  --pink-50:  #fff5f7;
+  --pink-100: #ffe0ea;
+  --pink-200: #ffc1d4;
+  --pink-300: #ff9bb9;
+  --pink-400: #f97aaa;
+  --pink-500: #e8559a;
+  --pink-600: #c43d7f;
+  --pink-700: #a03068;
+
+  /* ── Palette: Sage Green ── */
+  --green-50:  #f3f9f1;
+  --green-100: #dff0d8;
+  --green-200: #bde3b3;
+  --green-300: #93d085;
+  --green-400: #68bc5a;
+  --green-500: #4a9a3f;
+  --green-600: #3a7a30;
+
+  /* ── Neutrals ── */
+  --cream-100: #fffdf9;
+  --warm-50:   #faf5f0;
+
+  /* ── Semantic tokens (light mode) ── */
+  --bg-page:      var(--pink-50);
+  --bg-surface:   #ffffff;
+  --bg-elevated:  var(--cream-100);
+  --text-h:       #2d1b2e;
+  --text-body:    #4a3250;
+  --text-soft:    #7a5a7a;
+  --text-muted:   #a08aa0;
+  --border:       var(--pink-100);
+  --border-mid:   var(--pink-200);
+
+  /* Button tokens — computed for WCAG AA contrast */
+  --btn-primary-bg:   #c43d7f;   /* ≈ 5.5 : 1 against white */
+  --btn-primary-text: #ffffff;
+  --btn-primary-hover: #a03068;
+
+  --btn-secondary-bg:   #3a7a30; /* ≈ 6.5 : 1 against white */
+  --btn-secondary-text: #ffffff;
+  --btn-secondary-hover: #2e6224;
+
+  --btn-ghost-border: var(--pink-200);
+  --btn-ghost-text:   var(--text-soft);
+  --btn-ghost-hover-bg: var(--pink-100);
+  --btn-ghost-hover-text: #c43d7f;
+
+  /* Accent shortcuts */
+  --accent:       var(--btn-primary-bg);
+  --accent-light: var(--pink-100);
+  --accent-2:     var(--green-500);
+  --accent-2-light: var(--green-100);
+
+  /* Shadows */
+  --shadow-sm:    0 2px 8px  rgba(196, 61, 127, 0.07);
+  --shadow-md:    0 4px 24px rgba(196, 61, 127, 0.11);
+  --shadow-lg:    0 8px 40px rgba(196, 61, 127, 0.15);
+  --shadow-hover: 0 12px 48px rgba(196, 61, 127, 0.19);
+
+  /* Typography */
+  --font-serif: Georgia, 'Times New Roman', 'Palatino Linotype', serif;
+  --font-sans:  system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Spacing (4-px grid) */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Radii */
+  --radius-sm:   8px;
+  --radius-md:   16px;
+  --radius-lg:   24px;
+  --radius-xl:   32px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --t-fast: 150ms ease;
+  --t-base: 300ms ease;
+  --t-slow: 500ms ease;
+
+  /* Layout */
+  --container-max: 900px;
+  --section-gap:   clamp(3rem, 8vw, 6rem);
+}
+
+/* ── Dark mode overrides ── */
+[data-theme="dark"] {
+  --bg-page:     #1c0f1e;
+  --bg-surface:  #2a1a2c;
+  --bg-elevated: #341f38;
+  --text-h:      #f5e8f5;
+  --text-body:   #d4b8d4;
+  --text-soft:   #b090b0;
+  --text-muted:  #8a6a8a;
+  --border:      #3d2240;
+  --border-mid:  #5a3060;
+
+  /* Buttons: lighter backgrounds need dark text */
+  --btn-primary-bg:    #f97aaa; /* ≈ 8 : 1 against dark text */
+  --btn-primary-text:  #2d1b2e;
+  --btn-primary-hover: #ff9bb9;
+
+  --btn-secondary-bg:   #68bc5a;
+  --btn-secondary-text: #1a2e18;
+  --btn-secondary-hover: #93d085;
+
+  --btn-ghost-border:      #5a3060;
+  --btn-ghost-text:        #b090b0;
+  --btn-ghost-hover-bg:    rgba(249, 122, 170, 0.15);
+  --btn-ghost-hover-text:  #f97aaa;
+
+  --accent:        #f97aaa;
+  --accent-light:  rgba(249, 122, 170, 0.15);
+  --accent-2:      #68bc5a;
+  --accent-2-light: rgba(104, 188, 90, 0.15);
+
+  --shadow-sm:    0 2px 8px  rgba(0,0,0,0.3);
+  --shadow-md:    0 4px 24px rgba(0,0,0,0.4);
+  --shadow-lg:    0 8px 40px rgba(0,0,0,0.5);
+  --shadow-hover: 0 12px 48px rgba(0,0,0,0.6);
+}
+
+/* ================================================================
+   2. RESET & BASE
+   ================================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  color-scheme: light dark;
+  /* Smooth theme transitions (after initial load, the .pd-ready class enables this) */
+  transition: background-color var(--t-base), color var(--t-base);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--text-body);
+  background-color: var(--bg-page);
+  min-height: 100vh;
+  overflow-x: hidden;
+  /* iOS safe areas */
+  padding-top:    env(safe-area-inset-top);
+  padding-left:   env(safe-area-inset-left);
+  padding-right:  env(safe-area-inset-right);
+}
+
+#root { min-height: 100vh; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  color: var(--text-h);
+  line-height: 1.25;
+  font-weight: normal;
+}
+
+p { color: var(--text-body); }
+img, svg { display: block; max-width: 100%; }
+
+button {
+  font-family: var(--font-sans);
+  cursor: pointer;
+  min-height: 48px;
+  min-width: 48px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* ================================================================
+   3. SKIP LINK (keyboard accessibility)
+   ================================================================ */
+
+.skip-link {
+  position: absolute;
+  top: -120px;
+  left: 1rem;
+  z-index: 10000;
+  background: var(--accent);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  font-weight: 500;
+  transition: top var(--t-fast);
+}
+.skip-link:focus { top: 1rem; }
+
+/* ================================================================
+   4. LAYOUT
+   ================================================================ */
+
+.app {
+  min-height: 100vh;
+  position: relative;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 5vw, 2.5rem);
+}
+
+.section {
+  padding: var(--section-gap) 0;
+  position: relative;
+}
+
+/* ================================================================
+   5. UTILITY CLASSES
+   ================================================================ */
+
+/* Scroll-reveal (opacity 0 → 1, nudge up) */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+.section-title {
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  margin-bottom: var(--space-8);
+  text-align: center;
+  color: var(--text-h);
+}
+
+/* ================================================================
+   6. CARDS
+   ================================================================ */
+
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: clamp(1.25rem, 4vw, 2rem);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--t-base), box-shadow var(--t-base);
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* ================================================================
+   7. BUTTONS
+   ================================================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 0.75rem 1.625rem;
+  border-radius: var(--radius-full);
+  font-size: 1rem;
+  font-weight: 500;
+  border: 2px solid transparent;
+  transition: background var(--t-base), color var(--t-base),
+              border-color var(--t-base), box-shadow var(--t-base),
+              transform var(--t-fast);
+  min-height: 48px;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  line-height: 1;
+  white-space: nowrap;
+}
+.btn:active { transform: scale(0.96); }
+
+.btn-primary {
+  background: var(--btn-primary-bg);
+  color:      var(--btn-primary-text);
+  border-color: var(--btn-primary-bg);
+}
+.btn-primary:hover,
+.btn-primary:focus-visible {
+  background: var(--btn-primary-hover);
+  border-color: var(--btn-primary-hover);
+  box-shadow: 0 4px 16px rgba(196, 61, 127, 0.4);
+}
+
+.btn-secondary {
+  background: var(--btn-secondary-bg);
+  color:      var(--btn-secondary-text);
+  border-color: var(--btn-secondary-bg);
+}
+.btn-secondary:hover,
+.btn-secondary:focus-visible {
+  background: var(--btn-secondary-hover);
+  border-color: var(--btn-secondary-hover);
+}
+
+.btn-ghost {
+  background:   transparent;
+  color:        var(--btn-ghost-text);
+  border-color: var(--btn-ghost-border);
+}
+.btn-ghost:hover,
+.btn-ghost:focus-visible {
+  background:   var(--btn-ghost-hover-bg);
+  color:        var(--btn-ghost-hover-text);
+  border-color: var(--accent);
+}
+
+/* ================================================================
+   8. FIXED CONTROLS (theme & sound toggles)
+   ================================================================ */
+
+.theme-toggle,
+.sound-toggle {
+  position: fixed;
+  z-index: 100;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: transform var(--t-base), background var(--t-base),
+              border-color var(--t-base), box-shadow var(--t-base);
+  /* Reset min-height from global button rule */
+  min-height: 52px;
+  min-width:  52px;
+}
+
+.theme-toggle {
+  top:   calc(1rem + env(safe-area-inset-top));
+  right: calc(1rem + env(safe-area-inset-right));
+}
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  transform: scale(1.1) rotate(20deg);
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+
+.sound-toggle {
+  bottom: calc(1.5rem + env(safe-area-inset-bottom));
+  right:  calc(1.5rem + env(safe-area-inset-right));
+}
+.sound-toggle:hover,
+.sound-toggle:focus-visible {
+  transform: scale(1.1);
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.sound-toggle.active {
+  background:   var(--accent-light);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ================================================================
+   9. ANIMATED BACKGROUND
+   ================================================================ */
+
+.bg-particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  user-select: none;
+}
+
+.bg-particle {
+  position: absolute;
+  bottom: -60px;
+  line-height: 1;
+  animation: float-up linear infinite;
+  will-change: transform;
+}
+
+@keyframes float-up {
+  0% {
+    transform: translateY(0) rotate(-15deg) scale(0.85);
+    opacity: 0;
+  }
+  6%  { opacity: 0.55; }
+  90% { opacity: 0.3;  }
+  100% {
+    transform: translateY(calc(-100vh - 80px)) rotate(25deg) scale(1.1);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-particle { animation: none; opacity: 0; }
+}
+
+/* ================================================================
+   10. HERO
+   ================================================================ */
+
+.hero {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 5rem 1rem 3rem;
+  position: relative;
+}
+
+.hero-content {
+  animation: hero-enter 1s ease both;
+  max-width: 600px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-content { animation: none; }
+}
+
+.hero-crown {
+  font-size: clamp(3rem, 10vw, 5rem);
+  display: block;
+  margin-bottom: var(--space-4);
+  animation: crown-float 3s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-crown { animation: none; }
+}
+
+.hero-title {
+  font-size: clamp(2rem, 7vw, 4rem);
+  color: var(--text-h);
+  margin-bottom: var(--space-4);
+  font-style: italic;
+}
+
+.hero-name {
+  color: var(--accent);
+  display: inline-block;
+}
+
+.hero-subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  color: var(--text-soft);
+  margin-bottom: var(--space-10);
+  line-height: 1.6;
+}
+
+.hero-actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@keyframes hero-enter {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes crown-float {
+  0%, 100% { transform: translateY(0)   rotate(-3deg); }
+  50%       { transform: translateY(-12px) rotate(3deg); }
+}
+
+/* ================================================================
+   11. NOTE CARD
+   ================================================================ */
+
+.note-card {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.note-decoration {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: var(--space-4);
+}
+
+.note-text {
+  font-family: var(--font-serif);
+  font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+  line-height: 1.85;
+  font-style: italic;
+  color: var(--text-body);
+}
+
+.note-signature {
+  margin-top: var(--space-6);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+/* ================================================================
+   12. TRUTH CARDS
+   ================================================================ */
+
+.truths-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-4);
+}
+
+.truth-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+}
+
+.truth-emoji {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.truth-text {
+  font-size: 0.95rem;
+  color: var(--text-body);
+  line-height: 1.5;
+}
+
+/* ================================================================
+   13. COMPLIMENT GENERATOR
+   ================================================================ */
+
+.compliment-wrapper {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.compliment-display {
+  min-height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 3vw, 1.45rem);
+  font-style: italic;
+  color: var(--text-h);
+  margin: var(--space-6) 0;
+  padding: var(--space-6) var(--space-8);
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: opacity 0.35s ease;
+  line-height: 1.6;
+  text-align: center;
+}
+.compliment-display.fading { opacity: 0; }
+
+.compliment-hint {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-top: var(--space-3);
+  font-style: italic;
+}
+
+/* ================================================================
+   14. KINDNESS WALL (CAROUSEL)
+   ================================================================ */
+
+.carousel-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  /* Override card's hover lift for carousel */
+  transform: none;
+}
+.carousel-wrapper:hover {
+  transform: none;
+  box-shadow: var(--shadow-md);
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+@media (prefers-reduced-motion: reduce) {
+  .carousel-track { transition: none; }
+}
+
+.carousel-slide {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+.carousel-card {
+  margin: 0 auto;
+  max-width: 520px;
+  text-align: center;
+  padding: clamp(2rem, 6vw, 3.5rem) clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.carousel-emoji {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: var(--space-5);
+  line-height: 1;
+}
+
+.carousel-text {
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 3vw, 1.35rem);
+  color: var(--text-h);
+  font-style: italic;
+  line-height: 1.75;
+}
+
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding-bottom: var(--space-6);
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-4);
+  margin-top: var(--space-2);
+}
+
+.carousel-btn {
+  background: var(--bg-elevated);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-full);
+  width: 48px;
+  height: 48px;
+  min-height: 48px;
+  min-width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: var(--text-soft);
+  cursor: pointer;
+  transition: all var(--t-base);
+}
+.carousel-btn:hover,
+.carousel-btn:focus-visible {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+.carousel-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+  pointer-events: none;
+}
+
+.carousel-dots {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  min-height: unset;
+  min-width:  unset;
+  border-radius: 50%;
+  background: var(--border-mid);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all var(--t-base);
+  /* Extend touch area without affecting layout */
+  position: relative;
+}
+.carousel-dot::after {
+  content: '';
+  position: absolute;
+  inset: -20px;
+}
+.carousel-dot.active {
+  background: var(--accent);
+  width: 24px;
+  border-radius: var(--radius-full);
+}
+.carousel-dot:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ================================================================
+   15. TREAT SECTION (CAKE)
+   ================================================================ */
+
+.treat-wrapper {
+  text-align: center;
+}
+
+.treat-hint {
+  color: var(--text-soft);
+  font-size: 0.95rem;
+  margin-bottom: var(--space-4);
+  font-style: italic;
+}
+
+.cake-container {
+  display: inline-block;
+  position: relative;
+  margin: var(--space-6) auto;
+}
+
+.cake-svg {
+  width: min(240px, 70vw);
+  height: auto;
+  filter: drop-shadow(0 8px 24px rgba(196, 61, 127, 0.18));
+}
+
+/* SVG layer transitions */
+.cake-svg .flame {
+  transform-origin: 50% 100%;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.cake-svg .smoke {
+  opacity: 0;
+  transition: opacity 0.5s ease 0.4s;
+}
+.cake-svg.blown .flame {
+  opacity: 0;
+  transform: scale(0.1);
+}
+.cake-svg.blown .smoke {
+  opacity: 1;
+}
+
+/* Large invisible button over candle — 48 × 48 minimum */
+.blow-btn {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 100px;
+  min-height: unset;
+  min-width:  unset;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+.blow-btn:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.treat-message {
+  font-family: var(--font-serif);
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  color: var(--text-h);
+  font-style: italic;
+  margin-top: var(--space-4);
+  min-height: 1.75rem;
+  transition: opacity var(--t-slow);
+}
+
+/* ================================================================
+   16. LITTLE PAUSE
+   ================================================================ */
+
+.little-pause-tabs {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-8);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--border-mid);
+  background: transparent;
+  color: var(--text-soft);
+  font-size: 0.9rem;
+  transition: all var(--t-base);
+  min-height: 48px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tab-btn.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+.tab-btn:hover:not(.active),
+.tab-btn:focus-visible:not(.active) {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-light);
+}
+
+.tab-panel:not([hidden]) {
+  animation: tab-fade-in 0.3s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tab-panel:not([hidden]) { animation: none; }
+}
+
+/* Breathing circle */
+.breathing-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-4) 0 var(--space-2);
+}
+
+.breathing-circle {
+  width:  clamp(100px, 28vw, 150px);
+  height: clamp(100px, 28vw, 150px);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, var(--pink-200), var(--pink-500));
+  box-shadow: 0 0 0 16px var(--pink-100), 0 0 0 1px var(--pink-200);
+  transition: transform 4s cubic-bezier(0.4, 0, 0.6, 1),
+              box-shadow 4s ease;
+  flex-shrink: 0;
+}
+.breathing-circle.phase-in {
+  transform: scale(1.45);
+  box-shadow: 0 0 0 28px var(--pink-100), 0 0 0 1px var(--pink-200);
+}
+.breathing-circle.phase-out {
+  transform: scale(1);
+  box-shadow: 0 0 0 16px var(--pink-100), 0 0 0 1px var(--pink-200);
+}
+@media (prefers-reduced-motion: reduce) {
+  .breathing-circle { transition: none; }
+}
+
+.breathing-label {
+  font-size: 1.1rem;
+  color: var(--text-soft);
+  font-style: italic;
+  min-height: 1.5em;
+  text-align: center;
+}
+
+/* Gratitude */
+.gratitude-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-4) 0;
+}
+
+.gratitude-prompt {
+  font-family: var(--font-serif);
+  font-size: clamp(1.05rem, 3vw, 1.3rem);
+  font-style: italic;
+  color: var(--text-h);
+  text-align: center;
+  line-height: 1.75;
+  min-height: 4rem;
+  max-width: 440px;
+}
+
+.gratitude-actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Stretch */
+.stretch-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-4) 0;
+}
+
+.stretch-text {
+  font-size: 1rem;
+  color: var(--text-body);
+  line-height: 1.85;
+  text-align: center;
+  max-width: 440px;
+}
+
+/* ================================================================
+   17. FOOTER
+   ================================================================ */
+
+.site-footer {
+  text-align: center;
+  padding: var(--space-12) var(--space-4)
+           calc(var(--space-12) + env(safe-area-inset-bottom));
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* ================================================================
+   18. KEYFRAMES
+   ================================================================ */
+
+@keyframes tab-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Emoji fall (used by EmojiRain component via injected style) */
+@keyframes emoji-fall {
+  0%   { transform: translateY(0) rotate(0deg);   opacity: 1; }
+  85%  { opacity: 0.8; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+/* ================================================================
+   19. RESPONSIVE ADJUSTMENTS
+   ================================================================ */
+
+@media (max-width: 600px) {
+  .truths-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  .carousel-controls {
+    gap: var(--space-2);
+  }
+}
+
+@media (min-width: 768px) {
+  .truths-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

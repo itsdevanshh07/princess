@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="description" content="A little something made just for you, with care 🌸" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Happy Princess Day, Osheen 👑" />
+    <meta property="og:description" content="A little something made just for you, with care 🌸" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image:alt" content="Happy Princess Day banner" />
+
+    <!-- Theme colour for mobile chrome -->
+    <meta name="theme-color" content="#f9d6e3" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#2a1a2c" media="(prefers-color-scheme: dark)" />
+
+    <!-- Crown emoji favicon (inline data-URL — zero extra request) -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👑</text></svg>"
+    />
+
+    <title>Happy Princess Day, Osheen 👑</title>
+
+    <!--
+      Prevent Flash Of Wrong Theme.
+      Runs synchronously before any paint so the right data-theme is set
+      before CSS is applied.
+    -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('pd-theme');
+          var sys = window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light';
+          document.documentElement.dataset.theme = stored || sys;
+        } catch (_) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
